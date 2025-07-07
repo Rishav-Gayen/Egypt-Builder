@@ -166,7 +166,7 @@ export const destinations = [
     id: 'nile_cruise_stay',
     name: 'Nile Cruise Stay',
     imageUrl: 'https://images.unsplash.com/photo-1575501376367-6711b9b5756b?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    shortDesc: "Greece's largest island",
+    shortDesc: "Stay in the nile cruise",
     activities: [
       {
         id: 'three_day_cruise_sightseeing_Luxor_Aswan',
@@ -190,7 +190,7 @@ export const destinations = [
     id: 'Hurghada',
     name: 'Hurghada',
     imageUrl: 'https://www.toursfromhurghada.com/wp-content/uploads/2018/11/Hurghada-mosque-Hurghada-City-Day-Tour-Tours-From-Hurghada.jpg',
-    shortDesc: "Greece's largest island",
+    shortDesc: "Where land meets the red sea",
     activities: [
       {
         id: 'local_sightseeing',
