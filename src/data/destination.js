@@ -251,25 +251,25 @@ export const destinations = [
       {
         id: 'library_of_alexandria',
         name: 'Library of Alexandria',
-        imageUrl: 'https://uniquedestination.mitsishotels.com/wp-content/uploads/2022/09/shutterstock_2144547169-1024x688.jpg',
+        imageUrl: 'https://1.bp.blogspot.com/-coRQZbG2Hok/XoSFpbs4BdI/AAAAAAAApj0/v3hDQVyfuB4NNUSoEpAQX5i1EycPYj2JwCLcBGAsYHQ/s1600/kevin-kok-alx-19.jpg',
         selected: false
       },
       {
         id: 'ancient_city_ruins',
         name: 'Ancient City Ruins',
-        imageUrl: 'https://uniquedestination.mitsishotels.com/wp-content/uploads/2022/09/shutterstock_2144547169-1024x688.jpg',
+        imageUrl: 'https://library.acropolis.org/wp-content/uploads/2020/11/2048px-AlexandriaAmphitheatre-1024x391.jpeg',
         selected: false
       },
       {
         id: 'modern_city_port_visit',
         name: 'Modern City Port Visit',
-        imageUrl: 'https://uniquedestination.mitsishotels.com/wp-content/uploads/2022/09/shutterstock_2144547169-1024x688.jpg',
+        imageUrl: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/74/8e/fe.jpg',
         selected: false
       },
       {
         id: 'citadel',
         name: 'Citadel',
-        imageUrl: 'https://uniquedestination.mitsishotels.com/wp-content/uploads/2022/09/shutterstock_2144547169-1024x688.jpg',
+        imageUrl: 'https://www.inside-egypt.com/img/thumbs/w1200h800q85/news/6f1368b5ae7a6d587aba.jpeg',
         selected: false
       }
     ],
@@ -277,13 +277,11 @@ export const destinations = [
       'Accomodation (3 Star)',
       'Accomodation (4 Star)',
       'Accomodation (5 Star)',
-      'Beach Resort',
-      'Villa'
     ],
     metadata: {
       region: 'Lower Egypt',
       popular: false,
-      idealFor: ['history', 'beaches']
+      idealFor: ['history', 'culture']
     }
   }
 ];
