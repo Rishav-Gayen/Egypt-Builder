@@ -17,10 +17,6 @@ export const saveTripToSheety = async (tripData, customerData) => {
     throw new Error('All customer details are required');
   }
 
-  // Validate email format
-  if (!/^\S+@\S+\.\S+$/.test(customerData.email)) {
-    throw new Error('Invalid email format');
-  }
 
   // Validate phone format
   if (!/^[\d\s\+\-\(\)]{8,}$/.test(customerData.phone)) {
