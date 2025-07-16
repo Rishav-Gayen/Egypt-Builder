@@ -73,7 +73,7 @@ export const renderFlightForm = () => {
       <div class="form-group">
         <label>Dietary Preferences</label>
         <div class="checkbox-group">
-          ${['Vegetarian', 'Non-Vegetarian', 'No Preferences'].map(pref => `
+          ${['Vegetarian', 'Non Vegetarian', 'No Preferences'].map(pref => `
             <label>
               <input type="checkbox" name="dietary-prefs" 
                      value="${pref}"
@@ -98,56 +98,77 @@ export const setupFlightForm = () => {
   const form = document.getElementById('flight-preferences-form');
   if (!form) return;
 
-  // Handle form submission
-  form.addEventListener('submit', (e) => {
-    e.preventDefault(); // Prevent page refresh
-    
-    // Get form values
-    const departureCity = form.querySelector('#departure-city').value.trim();
-    const departureDate = form.querySelector('#departure-date').value;
-    const departureTime = form.querySelector('input[name="departure-time"]:checked')?.value;
-    const travelClass = form.querySelector('#travel-class').value;
-    
-    // Validate required fields
-    const errors = [];
-    if (!departureCity) errors.push('Please enter a departure city');
-    if (!departureDate) errors.push('Please select a departure date');
-    if (!departureTime) errors.push('Please select a preferred time window');
-    if (!travelClass) errors.push('Please select a travel class');
-    
-    if (errors.length > 0) {
-      // Show error message
-      Swal.fire({
-        title: 'Incomplete Form',
-        html: `Please fill in all required fields:<br><br>• ${errors.join('<br>• ')}`,
-        icon: 'error',
-        confirmButtonText: 'Got it!',
-        confirmButtonColor: '#00afef',
-        customClass: {
-          confirmButton: 'swal2-confirm'
-        }
-      });
-      return;
-    }
-    
-    const formData = {
-      departureCity,
-      departureDate,
-      departureTime,
-      travelClass,
+  // Initialize date picker with min date set to today
+  const departureDateInput = form.querySelector('#departure-date');
+  if (departureDateInput) {
+    const today = new Date().toISOString().split('T')[0];
+    departureDateInput.setAttribute('min', today);
+  }
+
+  // Set up single-select behavior for dietary preferences
+  const dietaryCheckboxes = form.querySelectorAll('input[name="dietary-prefs"]');
+  dietaryCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', (e) => {
+      if (e.target.checked) {
+        // Uncheck all other dietary preference checkboxes
+        dietaryCheckboxes.forEach(otherCheckbox => {
+          if (otherCheckbox !== e.target) {
+            otherCheckbox.checked = false;
+          }
+        });
+      }
+    });
+  });
+
+  const getFormData = () => {
+    return {
+      departureCity: form.querySelector('#departure-city').value.trim(),
+      departureDate: form.querySelector('#departure-date').value,
+      departureTime: form.querySelector('input[name="departure-time"]:checked')?.value,
+      travelClass: form.querySelector('#travel-class').value,
       dietaryPreferences: Array.from(
         form.querySelectorAll('input[name="dietary-prefs"]:checked')
       ).map(el => el.value)
     };
+  };
 
+  const validateForm = (formData) => {
+    const errors = [];
+    if (!formData.departureCity) errors.push('Please enter a departure city');
+    if (!formData.departureDate) errors.push('Please select a departure date');
+    else {
+      const selectedDate = new Date(formData.departureDate);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Reset time to compare dates only
+      
+      if (selectedDate < today) {
+        errors.push('Departure date cannot be in the past');
+      }
+    }
+    if (!formData.departureTime) errors.push('Please select a preferred time window');
+    if (!formData.travelClass) errors.push('Please select a travel class');
+    return errors;
+  };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    const formData = getFormData();
+    const errors = validateForm(formData);
+    
+    if (errors.length > 0) {
+      Swal.fire({
+        title: 'Invalid Form Data',
+        html: `Please correct the following:<br><br>• ${errors.join('<br>• ')}`,
+        icon: 'error',
+        confirmButtonText: 'Got it!',
+        confirmButtonColor: '#00afef'
+      });
+      return;
+    }
+    
     try {
-      // Save the flight preferences
-      saveFlightPreferences(formData);
-      
-      // Update the summary to show flight info
+      await saveFlightPreferences(formData);
       updateItinerarySummary();
-      
-      // Show confirmation
       showSaveConfirmation();
     } catch (error) {
       console.error('Error saving flight preferences:', error);
@@ -159,23 +180,19 @@ export const setupFlightForm = () => {
         confirmButtonColor: '#00afef'
       });
     }
-  });
+  };
 
-  // Optional: Auto-save on changes
+  form.addEventListener('submit', handleFormSubmit);
   form.addEventListener('change', debounce(() => {
-    const formData = {
-      departureCity: form.querySelector('#departure-city').value,
-      departureDate: form.querySelector('#departure-date').value,
-      departureTime: form.querySelector('input[name="departure-time"]:checked')?.value,
-      travelClass: form.querySelector('#travel-class').value,
-      dietaryPreferences: Array.from(
-        form.querySelectorAll('input[name="dietary-prefs"]:checked')
-      ).map(el => el.value)
-    };
-    saveFlightPreferences(formData);
+    const formData = getFormData();
+    // Only auto-save if date is valid
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (!formData.departureDate || new Date(formData.departureDate) >= today) {
+      saveFlightPreferences(formData);
+    }
   }, 300));
 };
-
 // Temporary add-ons placeholder until you create the actual module
 
 // Save Confirmation
